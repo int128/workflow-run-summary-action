@@ -1,9 +1,12 @@
-name: hello-world
-description: say Hello World
+name: workflow-run-metadata-action
+description: Action to get a metadata on workflow_run event
+
 inputs:
-  name:
-    description: example input
+  token:
+    description: GitHub token
     required: true
+    default: ${{ github.token }}
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
