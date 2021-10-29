@@ -1,0 +1,21 @@
+name: e2e
+
+on:
+  workflow_run:
+    workflows:
+      - '**'
+    types:
+      - completed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Event payload
+        run: |
+          jq . <<EOF
+          ${{ toJSON(github.event) }}
+          EOF
+      - uses: int128/workflow-run-summary-action@v1
+        id: summary
