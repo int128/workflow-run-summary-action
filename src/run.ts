@@ -28,9 +28,11 @@ export const run = async (inputs: Inputs): Promise<Outputs | undefined> => {
 }
 
 const handleWorkflowRun = async (e: WorkflowRunEvent, octokit: Octokit): Promise<Outputs> => {
-  const checkSuite = await getCheckSuite(octokit, { id: e.workflow_run.check_suite_node_id })
+  const { check_suite_node_id } = e.workflow_run
+  core.info(`Getting the check suite ${check_suite_node_id}`)
+  const checkSuite = await getCheckSuite(octokit, { id: check_suite_node_id })
   if (checkSuite.node?.__typename !== 'CheckSuite') {
-    throw new Error(`unknown __typename ${checkSuite.node?.__typename ?? 'undefined'}`)
+    throw new Error(`invalid typename in response: ${JSON.stringify(checkSuite)}`)
   }
 
   const annotationMessages = new Set<string>()
