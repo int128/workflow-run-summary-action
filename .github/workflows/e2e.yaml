@@ -19,3 +19,8 @@ jobs:
           EOF
       - uses: int128/workflow-run-summary-action@v1
         id: summary
+      - run: echo "$SLACK_MESSAGE"
+        env:
+          SLACK_MESSAGE: ${{ steps.summary.outputs.annotation-messages }}
+        if: |
+          !steps.summary.outputs.cancelled && !steps.summary.outputs.skipped
