@@ -1,6 +1,6 @@
-# typescript-action [![ts](https://github.com/int128/typescript-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/typescript-action/actions/workflows/ts.yaml)
+# workflow-run-summary-action [![ts](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml)
 
-This is a template of TypeScript Action.
+This is an action to calculate summary of a workflow run.
 
 
 ## Getting Started
@@ -9,13 +9,11 @@ To run this action:
 
 ```yaml
 jobs:
-  build:
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: int128/typescript-action@v1
-        with:
-          name: hello
+      - uses: int128/workflow-run-summary-action@v1
+        id: summary
 ```
 
 
@@ -23,11 +21,13 @@ jobs:
 
 | Name | Default | Description
 |------|----------|------------
-| `name` | (required) | example input
+| `token` | `github.token` | GitHub token
 
 
 ## Outputs
 
 | Name | Description
 |------|------------
-| `example` | example output
+| `annotation-messages` | annotation messages related to the workflow run
+| `cancelled` | true if any check run is cancelled
+| `skipped` | true if all checks are skipped
