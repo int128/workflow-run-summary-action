@@ -6,6 +6,7 @@ type Octokit = InstanceType<typeof GitHub>
 const query = /* GraphQL */ `
   query checkSuite($id: ID!) {
     node(id: $id) {
+      __typename
       ... on CheckSuite {
         checkRuns(first: 100) {
           nodes {
