@@ -1,9 +1,20 @@
-name: hello-world
-description: say Hello World
+name: workflow-run-metadata-action
+description: action to calculate summary of a workflow run
+
 inputs:
-  name:
-    description: example input
+  token:
+    description: GitHub token
     required: true
+    default: ${{ github.token }}
+
+outputs:
+  annotation-messages:
+    description: annotation messages related to the workflow_run
+  cancelled:
+    description: true if any check run is cancelled
+  skipped:
+    description: true if all checks are skipped
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
