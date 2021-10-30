@@ -3,7 +3,7 @@ name: e2e
 on:
   workflow_run:
     workflows:
-      - '**'
+      - e2e-fixture
     types:
       - completed
 
@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Event payload
-        run: |
-          jq . <<EOF
-          ${{ toJSON(github.event) }}
-          EOF
       - uses: int128/workflow-run-summary-action@v1
         id: summary
       - run: echo "cancelled = ${{ steps.summary.outputs.cancelled }}"

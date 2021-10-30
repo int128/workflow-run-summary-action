@@ -36,7 +36,5 @@ jobs:
       - run: yarn build
       - run: yarn package
 
-      - run: echo "::error::this is an example"
-
       - name: e2e-test
         uses: ./
