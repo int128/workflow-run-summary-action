@@ -22,6 +22,7 @@
     "@graphql-codegen/typescript": "2.2.4",
     "@graphql-codegen/typescript-operations": "2.1.8",
     "@octokit/graphql-schema": "10.73.0",
+    "@tsconfig/node16": "1.0.2",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.24",
     "@typescript-eslint/eslint-plugin": "5.2.0",
