@@ -1497,10 +1497,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@octokit/webhooks-types@4.18.0":
-  version "4.18.0"
-  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-4.18.0.tgz#c41038728e586b58f8e74ae51d86c129956cad88"
-  integrity sha512-fxq0bBXgJWAwNheFSWWkAx3mvX299IS46PnSksqmbTRsS6RT7i1r7J8ogD1dO5tb1SNCmgUjDexfiSq9BsPtxg==
+"@octokit/webhooks-types@5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-5.4.0.tgz#0266918ca7e8b725a5275192cb9c63f50550edce"
+  integrity sha512-wqe8PCvR1R8AEaw1GaT8Q71FnJndGXWg7p9xz+ezrrQ0mm510xZ4J6cywOPemNFFzfGzhAvCh2PqZUevuVqxqQ==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
