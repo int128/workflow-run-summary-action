@@ -16,5 +16,5 @@ outputs:
     description: true if all checks are skipped
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
