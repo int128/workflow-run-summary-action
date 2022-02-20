@@ -1,5 +1,5 @@
-name: workflow-run-metadata-action
-description: action to calculate summary of a workflow run
+name: workflow-run-summary-action
+description: Get the summary of workflow run such as annotations, cancelled or skipped
 
 inputs:
   token:
