@@ -14,6 +14,7 @@ const query = /* GraphQL */ `
             annotations(first: 10) {
               nodes {
                 message
+                annotationLevel
               }
             }
           }

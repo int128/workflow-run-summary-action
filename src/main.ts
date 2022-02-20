@@ -7,6 +7,7 @@ const main = async (): Promise<void> => {
   })
   if (outputs !== undefined) {
     core.setOutput('annotation-messages', outputs.annotationMessages)
+    core.setOutput('annotation-failure-messages', outputs.annotationFailureMessages)
     core.setOutput('cancelled', outputs.cancelled)
     core.setOutput('skipped', outputs.skipped)
   }
