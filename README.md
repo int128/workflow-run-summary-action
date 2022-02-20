@@ -69,5 +69,6 @@ You can build a payload on https://app.slack.com/block-kit-builder.
 | Name | Description
 |------|------------
 | `annotation-messages` | annotation messages related to the workflow run
+| `annotation-failure-messages` | annotation messages of failure only
 | `cancelled` | true if any check run is cancelled
 | `skipped` | true if all checks are skipped

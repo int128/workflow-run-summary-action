@@ -10,6 +10,8 @@ inputs:
 outputs:
   annotation-messages:
     description: annotation messages related to the workflow_run
+  annotation-failure-messages:
+    description: annotation messages of failure only
   cancelled:
     description: true if any check run is cancelled
   skipped:
