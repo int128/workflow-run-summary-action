@@ -19,3 +19,6 @@ jobs:
       - run: echo "$SLACK_MESSAGE"
         env:
           SLACK_MESSAGE: ${{ steps.summary.outputs.annotation-messages }}
+      - run: echo "$SLACK_MESSAGE"
+        env:
+          SLACK_MESSAGE: ${{ steps.summary.outputs.annotation-failure-messages }}
