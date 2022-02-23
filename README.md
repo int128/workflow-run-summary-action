@@ -9,6 +9,8 @@ This is an action to get a summary of a workflow run.
 
 Here is an example to send a notification to a Slack channel when a workflow fails on main branch.
 
+<img width="900" alt="image" src="https://user-images.githubusercontent.com/321266/155245109-22712f13-2f04-428d-9156-3fae5880ecd6.png">
+
 GitHub Actions sets the conclusion as `failure` even if a workflow was cancelled or skipped.
 You can determine the cancel or skip by this action.
 
