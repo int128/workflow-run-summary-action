@@ -1,7 +1,7 @@
 import * as Types from './graphql-types';
 
 export type CheckSuiteQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
