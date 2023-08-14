@@ -2093,10 +2093,10 @@
     is-plain-object "^5.0.0"
     universal-user-agent "^6.0.0"
 
-"@octokit/graphql-schema@14.3.0":
-  version "14.3.0"
-  resolved "https://registry.yarnpkg.com/@octokit/graphql-schema/-/graphql-schema-14.3.0.tgz#e957fbc598a9a3617978b5760d989776583b3618"
-  integrity sha512-4AdAdxUDYyXZBfP6mPwihKm7bku2Er0rGVidSNXQLs57ZmriKb8OHZQS/Wcm19S/4Mp7vMFV+E/GL2IPeVjkNw==
+"@octokit/graphql-schema@14.27.2":
+  version "14.27.2"
+  resolved "https://registry.yarnpkg.com/@octokit/graphql-schema/-/graphql-schema-14.27.2.tgz#ca955d424c6e1716e796c87a0fd2e088dd539763"
+  integrity sha512-Iczh8dLseBPR4zOUnAZHVWZiHF85PoXy1fXgPzA5hsx72RGpCg78kSyReACOxpIJXTtnFU8rg95bdTPKQSX0Hg==
   dependencies:
     graphql "^16.0.0"
     graphql-tag "^2.10.3"
@@ -2170,10 +2170,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@octokit/webhooks-types@7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-7.0.3.tgz#7b7ee3e6a0814134cfe5ecb4736e8d1c6fdb6031"
-  integrity sha512-yDw/89TBaMotdT1/4gxVaiemBhswBd+jPazhL60/rS5WqXC6JZuj5CkDql7Dhc9vAbbkrJBkWsa2sppM/g8jxQ==
+"@octokit/webhooks-types@7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-7.2.0.tgz#b5d5348a58596d36cb445e7fe119db01cdd4169e"
+  integrity sha512-TX6347q0TJbKZD5M1wiMFUrq8T/GP6PkcnssLfw/fZ+//jkW8uRvOl63bNlhPGt82sml9Dy5nSPP0GIHW9XBTQ==
 
 "@peculiar/asn1-schema@^2.1.6":
   version "2.2.0"
