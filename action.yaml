@@ -9,13 +9,17 @@ inputs:
 
 outputs:
   annotation-messages:
-    description: annotation messages related to the workflow_run
+    description: Annotation messages related to the workflow_run
   annotation-failure-messages:
-    description: annotation messages of failure only
+    description: Annotation messages of failure only
   cancelled:
     description: true if any check run is cancelled
   skipped:
     description: true if all checks are skipped
+  pull-request-number:
+    description: Number of associated pull request, if exists
+  pull-request-url:
+    description: URL of associated pull request, if exists
 
 runs:
   using: 'node16'

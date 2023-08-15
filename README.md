@@ -32,7 +32,7 @@ It provides the following outputs:
 
 This example workflow sends a notification when a workflow fails on main branch.
 
-```yaml
+````yaml
 name: slack-notification
 
 on:
@@ -80,7 +80,7 @@ jobs:
           payload: ${{ steps.payload.outputs.result }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
-```
+````
 
 You can build a Slack payload on https://app.slack.com/block-kit-builder.
 
@@ -94,15 +94,17 @@ This action fetches the details of workflow run by GraphQL [check suite query](s
 
 ### Inputs
 
-| Name | Default | Description
-|------|----------|------------
-| `token` | `github.token` | GitHub token
+| Name    | Default        | Description  |
+| ------- | -------------- | ------------ |
+| `token` | `github.token` | GitHub token |
 
 ### Outputs
 
-| Name | Description
-|------|------------
-| `annotation-messages` | annotation messages related to the workflow run
-| `annotation-failure-messages` | annotation messages of failure only
-| `cancelled` | true if any check run is cancelled
-| `skipped` | true if all checks are skipped
+| Name                          | Description                                     |
+| ----------------------------- | ----------------------------------------------- |
+| `annotation-messages`         | Annotation messages related to the workflow run |
+| `annotation-failure-messages` | Annotation messages of failure only             |
+| `cancelled`                   | `true` if any check run is cancelled            |
+| `skipped`                     | `true` if all checks are skipped                |
+| `pull-request-number`         | Number of associated pull request, if exists    |
+| `pull-request-url`            | URL of associated pull request, if exists       |

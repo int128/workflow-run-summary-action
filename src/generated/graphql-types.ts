@@ -21,7 +21,7 @@ export type Scalars = {
   GitTimestamp: { input: any; output: any; }
   HTML: { input: any; output: any; }
   PreciseDateTime: { input: any; output: any; }
-  URI: { input: any; output: any; }
+  URI: { input: string; output: string; }
   X509Certificate: { input: any; output: any; }
 };
 

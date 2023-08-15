@@ -12,3 +12,6 @@ generates:
     preset: import-types
     presetConfig:
       typesPath: ./graphql-types
+config:
+  scalars:
+    URI: string
