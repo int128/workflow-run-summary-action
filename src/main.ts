@@ -10,6 +10,11 @@ const main = async (): Promise<void> => {
     core.setOutput('annotation-failure-messages', outputs.annotationFailureMessages)
     core.setOutput('cancelled', outputs.cancelled)
     core.setOutput('skipped', outputs.skipped)
+
+    if (outputs.associatedPullRequest !== undefined) {
+      core.setOutput('pull-request-number', outputs.associatedPullRequest.number)
+      core.setOutput('pull-request-url', outputs.associatedPullRequest.url)
+    }
   }
 }
 

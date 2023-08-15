@@ -19,6 +19,15 @@ const query = /* GraphQL */ `
             }
           }
         }
+        commit {
+          associatedPullRequests(first: 1) {
+            totalCount
+            nodes {
+              number
+              url
+            }
+          }
+        }
       }
     }
   }

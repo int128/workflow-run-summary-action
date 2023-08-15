@@ -1,3 +1,4 @@
+import assert from 'assert'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { GitHub } from '@actions/github/lib/utils'
@@ -12,11 +13,17 @@ type Inputs = {
   token: string
 }
 
-type Outputs = {
+export type Outputs = {
   annotationMessages: string
   annotationFailureMessages: string
   cancelled: boolean
   skipped: boolean
+  associatedPullRequest: AssociatedPullRequest | undefined
+}
+
+type AssociatedPullRequest = {
+  number: number
+  url: string
 }
 
 export const run = async (inputs: Inputs): Promise<Outputs | undefined> => {
@@ -37,15 +44,13 @@ const handleWorkflowRun = async (e: WorkflowRunEvent, octokit: Octokit): Promise
   return computeOutputs(checkSuite)
 }
 
-const computeOutputs = (checkSuite: CheckSuiteQuery): Outputs => {
-  if (checkSuite.node?.__typename !== 'CheckSuite') {
-    throw new Error(`invalid typename ${checkSuite.node?.__typename ?? '?'}`)
-  }
+export const computeOutputs = (checkSuite: CheckSuiteQuery): Outputs => {
+  assert(checkSuite.node != null)
+  assert(checkSuite.node.__typename === 'CheckSuite')
 
   const annotationMessages = new Set<string>()
   const annotationFailureMessages = new Set<string>()
   const conclusions = new Array<CheckConclusionState>()
-
   for (const checkRun of checkSuite.node.checkRuns?.nodes ?? []) {
     if (checkRun == null) {
       continue
@@ -63,10 +68,23 @@ const computeOutputs = (checkSuite: CheckSuiteQuery): Outputs => {
     }
   }
 
+  let associatedPullRequest
+  assert(checkSuite.node.commit.associatedPullRequests != null)
+  assert(checkSuite.node.commit.associatedPullRequests.nodes != null)
+  if (checkSuite.node.commit.associatedPullRequests.nodes.length > 0) {
+    const pull = checkSuite.node.commit.associatedPullRequests.nodes[0]
+    assert(pull != null)
+    associatedPullRequest = {
+      number: pull.number,
+      url: pull.url,
+    }
+  }
+
   return {
     annotationMessages: [...annotationMessages].join('\n'),
     annotationFailureMessages: [...annotationFailureMessages].join('\n'),
     cancelled: conclusions.some((c) => c === CheckConclusionState.Cancelled),
     skipped: conclusions.every((c) => c === CheckConclusionState.Skipped),
+    associatedPullRequest,
   }
 }
