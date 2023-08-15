@@ -1,36 +1,10 @@
 # workflow-run-summary-action [![ts](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml)
 
-This is an action to get the summary of the current workflow run.
-
-## Purpose
-
-This action provides the following outputs.
-
-### Annotation messages
-
-It would be nice if we can see the cause of failure on Slack notification.
-For example,
-
-<img width="900" alt="image" src="https://user-images.githubusercontent.com/321266/155245109-22712f13-2f04-428d-9156-3fae5880ecd6.png">
-
-This actions fetches the annotations of the current workflow run.
-It provides the following outputs:
-
-- `annotation-messages`
-- `annotation-failure-messages`
-
-### Conclusion
-
-GitHub Actions sets the conclusion of workflow to `failure`, even if it was `cancelled` or `skipped`.
-This action determines the accurate conclusion from all jobs.
-It provides the following outputs:
-
-- `cancelled`
-- `skipped`
+This is an action to get the summary of current workflow run.
 
 ## Getting Started
 
-This example workflow sends a notification when a workflow fails on main branch.
+Here is an example to send a Slack notification on failure.
 
 ````yaml
 name: slack-notification
@@ -39,8 +13,6 @@ on:
   workflow_run:
     types:
       - completed
-    workflows:
-      - '*--test'
 
 jobs:
   main-branch:
@@ -82,16 +54,45 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
 ````
 
-You can build a Slack payload on https://app.slack.com/block-kit-builder.
+For example,
 
-## Use-case
+<img width="900" alt="image" src="https://user-images.githubusercontent.com/321266/155245109-22712f13-2f04-428d-9156-3fae5880ecd6.png">
+
+You can preview a payload from https://app.slack.com/block-kit-builder.
+
+### Example use-case
 
 - https://github.com/quipper/slack-notification-action
 
+## Summary
+
+This action acquires the details of workflow run by [GraphQL query](src/queries/check-suite.ts).
+
+### Annotation messages
+
+This actions returns the annotation messages of the current workflow run as follows:
+
+- `annotation-messages`
+- `annotation-failure-messages`
+
+### Associated pull request
+
+If the workflow run has an associated pull request, this action returns the following outputs:
+
+- `pull-request-number`
+- `pull-request-url`
+
+### Conclusion
+
+GitHub Actions returns the conclusion of workflow to `failure`, even if any job has been `cancelled` or `skipped`.
+
+This action calculates the accurate conclusion from all jobs.
+It provides the following outputs:
+
+- `cancelled`: `true` if any job is cancelled
+- `skipped`: `true` if all jobs are skipped
+
 ## Specification
-
-This action fetches the details of workflow run by GraphQL [check suite query](src/queries/check-suite.ts).
-
 ### Inputs
 
 | Name    | Default        | Description  |
@@ -104,7 +105,7 @@ This action fetches the details of workflow run by GraphQL [check suite query](s
 | ----------------------------- | ----------------------------------------------- |
 | `annotation-messages`         | Annotation messages related to the workflow run |
 | `annotation-failure-messages` | Annotation messages of failure only             |
-| `cancelled`                   | `true` if any check run is cancelled            |
-| `skipped`                     | `true` if all checks are skipped                |
 | `pull-request-number`         | Number of associated pull request, if exists    |
 | `pull-request-url`            | URL of associated pull request, if exists       |
+| `cancelled`                   | `true` if any check run is cancelled            |
+| `skipped`                     | `true` if all checks are skipped                |
