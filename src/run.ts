@@ -46,7 +46,7 @@ const handleWorkflowRun = async (e: WorkflowRunEvent, octokit: Octokit): Promise
 
 export const computeOutputs = (checkSuite: CheckSuiteQuery): Outputs => {
   assert(checkSuite.node != null)
-  assert(checkSuite.node.__typename === 'CheckSuite')
+  assert.strictEqual(checkSuite.node.__typename, 'CheckSuite')
 
   const annotationMessages = new Set<string>()
   const annotationFailureMessages = new Set<string>()
