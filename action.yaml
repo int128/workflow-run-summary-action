@@ -22,5 +22,5 @@ outputs:
     description: URL of associated pull request, if exists
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
