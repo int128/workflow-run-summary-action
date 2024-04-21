@@ -1,7 +1,7 @@
-import { GitHub } from '@actions/github/lib/utils'
-import { CheckSuiteQuery, CheckSuiteQueryVariables } from '../generated/graphql'
+import * as github from '@actions/github'
+import { CheckSuiteQuery, CheckSuiteQueryVariables } from '../generated/graphql.js'
 
-type Octokit = InstanceType<typeof GitHub>
+type Octokit = ReturnType<typeof github.getOctokit>
 
 const query = /* GraphQL */ `
   query checkSuite($id: ID!) {

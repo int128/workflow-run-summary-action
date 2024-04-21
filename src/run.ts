@@ -1,13 +1,12 @@
 import assert from 'assert'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { GitHub } from '@actions/github/lib/utils'
 import { WorkflowRunEvent } from '@octokit/webhooks-types'
-import { CheckSuiteQuery } from './generated/graphql'
-import { CheckAnnotationLevel, CheckConclusionState } from './generated/graphql-types'
-import { getCheckSuite } from './queries/check-suite'
+import { CheckSuiteQuery } from './generated/graphql.js'
+import { CheckAnnotationLevel, CheckConclusionState } from './generated/graphql-types.js'
+import { getCheckSuite } from './queries/check-suite.js'
 
-type Octokit = InstanceType<typeof GitHub>
+type Octokit = ReturnType<typeof github.getOctokit>
 
 type Inputs = {
   token: string

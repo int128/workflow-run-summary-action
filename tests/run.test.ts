@@ -1,5 +1,5 @@
-import { CheckAnnotationLevel, CheckConclusionState } from '../src/generated/graphql-types'
-import { Outputs, computeOutputs } from '../src/run'
+import { CheckAnnotationLevel, CheckConclusionState } from '../src/generated/graphql-types.js'
+import { Outputs, computeOutputs } from '../src/run.js'
 
 describe('computeOutputs', () => {
   test('full fields', () => {
