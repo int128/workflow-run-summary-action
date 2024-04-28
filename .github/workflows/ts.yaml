@@ -8,6 +8,8 @@ on:
       - tests/**
       - '*.json'
       - '*.yaml'
+      - '*.config.*'
+      - graphql-codegen.*
       - .github/workflows/ts.yaml
   pull_request:
     branches: [main]
@@ -16,6 +18,8 @@ on:
       - tests/**
       - '*.json'
       - '*.yaml'
+      - '*.config.*'
+      - graphql-codegen.*
       - .github/workflows/ts.yaml
 
 jobs:
