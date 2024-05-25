@@ -36,11 +36,7 @@ jobs:
       - run: pnpm test
       - run: pnpm build
 
-      - run: echo "::error::This is an example"
-      - run: exit 1
-      - if: always()
-        id: workflow-run-summary-action
-        name: Run int128/workflow-run-summary-action
+      - name: Run int128/workflow-run-summary-action
         uses: ./
 
   generate:
