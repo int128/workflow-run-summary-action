@@ -66,7 +66,8 @@ You can preview a payload from https://app.slack.com/block-kit-builder.
 
 ## Summary
 
-This action acquires the details of workflow run by [GraphQL query](src/queries/check-suite.ts).
+When this action is run on a `workflow_run` event, it inspects the target workflow run.
+Otherwise, it inspects the current workflow run.
 
 ### Annotation messages
 
@@ -93,6 +94,7 @@ It provides the following outputs:
 - `skipped`: `true` if all jobs are skipped
 
 ## Specification
+
 ### Inputs
 
 | Name    | Default        | Description  |

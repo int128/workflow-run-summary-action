@@ -1,10 +1,8 @@
-import assert from 'assert'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { WorkflowRunEvent } from '@octokit/webhooks-types'
-import { CheckSuiteQuery } from './generated/graphql.js'
-import { CheckAnnotationLevel, CheckConclusionState } from './generated/graphql-types.js'
-import { getCheckSuite } from './queries/check-suite.js'
+import { getWorkflowRunSummary } from './workflow-run.js'
+import { getWorkflowRun } from './queries/workflow-run.js'
 
 type Octokit = ReturnType<typeof github.getOctokit>
 
@@ -26,64 +24,31 @@ type AssociatedPullRequest = {
 }
 
 export const run = async (inputs: Inputs): Promise<Outputs | undefined> => {
+  const octokit = github.getOctokit(inputs.token)
   if (github.context.eventName === 'workflow_run') {
     const e = github.context.payload as WorkflowRunEvent
-    const octokit = github.getOctokit(inputs.token)
     return await handleWorkflowRun(e, octokit)
   }
-
-  core.warning(`unknown event ${github.context.eventName}`)
+  return handleOtherEvent(octokit)
 }
 
 const handleWorkflowRun = async (e: WorkflowRunEvent, octokit: Octokit): Promise<Outputs> => {
-  const { check_suite_node_id } = e.workflow_run
-  core.info(`Getting the check suite ${check_suite_node_id}`)
-  const checkSuite = await getCheckSuite(octokit, { id: check_suite_node_id })
-  core.info(`Found the check suite: ${JSON.stringify(checkSuite, undefined, 2)}`)
-  return computeOutputs(checkSuite)
+  core.info(`Getting the workflow run ${e.workflow_run.node_id}`)
+  const checkSuite = await getWorkflowRun(octokit, { id: e.workflow_run.node_id })
+  core.info(`Found the workflow run: ${JSON.stringify(checkSuite, undefined, 2)}`)
+  return getWorkflowRunSummary(checkSuite)
 }
 
-export const computeOutputs = (checkSuite: CheckSuiteQuery): Outputs => {
-  assert(checkSuite.node != null)
-  assert.strictEqual(checkSuite.node.__typename, 'CheckSuite')
+const handleOtherEvent = async (octokit: Octokit): Promise<Outputs> => {
+  core.info(`Getting the workflow run ${github.context.runId}`)
+  const { data: workflowRun } = await octokit.rest.actions.getWorkflowRun({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    run_id: github.context.runId,
+  })
 
-  const annotationMessages = new Set<string>()
-  const annotationFailureMessages = new Set<string>()
-  const conclusions = new Array<CheckConclusionState>()
-  for (const checkRun of checkSuite.node.checkRuns?.nodes ?? []) {
-    if (checkRun == null) {
-      continue
-    }
-    if (checkRun.conclusion) {
-      conclusions.push(checkRun.conclusion)
-    }
-    for (const annotation of checkRun.annotations?.nodes ?? []) {
-      if (annotation?.message) {
-        annotationMessages.add(annotation.message)
-        if (annotation.annotationLevel === CheckAnnotationLevel.Failure) {
-          annotationFailureMessages.add(annotation.message)
-        }
-      }
-    }
-  }
-
-  let associatedPullRequest
-  assert(checkSuite.node.commit.associatedPullRequests != null)
-  assert(checkSuite.node.commit.associatedPullRequests.nodes != null)
-  if (checkSuite.node.commit.associatedPullRequests.nodes.length > 0) {
-    const pull = checkSuite.node.commit.associatedPullRequests.nodes[0]
-    assert(pull != null)
-    associatedPullRequest = {
-      number: pull.number,
-      url: pull.url,
-    }
-  }
-
-  return {
-    annotationMessages: [...annotationMessages].join('\n'),
-    annotationFailureMessages: [...annotationFailureMessages].join('\n'),
-    cancelled: conclusions.some((c) => c === CheckConclusionState.Cancelled),
-    skipped: conclusions.every((c) => c === CheckConclusionState.Skipped),
-    associatedPullRequest,
-  }
+  core.info(`Getting the workflow run ${workflowRun.node_id}`)
+  const checkSuite = await getWorkflowRun(octokit, { id: workflowRun.node_id })
+  core.info(`Found the workflow run: ${JSON.stringify(checkSuite, undefined, 2)}`)
+  return getWorkflowRunSummary(checkSuite)
 }
