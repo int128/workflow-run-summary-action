@@ -14,9 +14,6 @@ importers:
       '@actions/github':
         specifier: 6.0.0
         version: 6.0.0
-      '@octokit/webhooks-types':
-        specifier: 7.5.1
-        version: 7.5.1
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -900,9 +897,6 @@ packages:
 
   '@octokit/types@12.6.0':
     resolution: {integrity: sha512-1rhSOfRa6H9w4YwK0yrf5faDaDTb+yLyBUKOCV4xtCDB5VmIPqd/v9yr9o6SAzOAlRxMiRiCic6JVM1/kunVkw==}
-
-  '@octokit/webhooks-types@7.5.1':
-    resolution: {integrity: sha512-1dozxWEP8lKGbtEu7HkRbK1F/nIPuJXNfT0gd96y6d3LcHZTtRtlf8xz3nicSJfesADxJyDh+mWBOsdLkqgzYw==}
 
   '@peculiar/asn1-schema@2.3.8':
     resolution: {integrity: sha512-ULB1XqHKx1WBU/tTFIA+uARuRoBVZ4pNdOA878RDrRbBfBGcSzi5HBkdScC6ZbHn8z7L8gmKCgPC1LHRrP46tA==}
@@ -4150,8 +4144,6 @@ snapshots:
   '@octokit/types@12.6.0':
     dependencies:
       '@octokit/openapi-types': 20.0.0
-
-  '@octokit/webhooks-types@7.5.1': {}
 
   '@peculiar/asn1-schema@2.3.8':
     dependencies:
