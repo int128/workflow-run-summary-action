@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { CheckAnnotationLevel, CheckConclusionState } from '../src/generated/graphql-types.js'
 import { Outputs } from '../src/run.js'
 import { getWorkflowRunSummary } from '../src/workflow-run.js'
