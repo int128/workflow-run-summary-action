@@ -1,10 +1,9 @@
 import * as core from '@actions/core'
 import { run } from './run.js'
+import { getContext, getOctokit } from './github.js'
 
 const main = async (): Promise<void> => {
-  const outputs = await run({
-    token: core.getInput('token', { required: true }),
-  })
+  const outputs = await run(getOctokit(), await getContext())
   if (outputs !== undefined) {
     core.setOutput('annotation-messages', outputs.annotationMessages)
     core.setOutput('annotation-failure-messages', outputs.annotationFailureMessages)
