@@ -17,9 +17,16 @@ type AssociatedPullRequest = {
   url: string
 }
 
-export const run = async (octokit: Octokit, context: Context): Promise<Outputs | undefined> => {
+export const run = async (octokit: Octokit, context: Context): Promise<Outputs> => {
   const workflowRun = await getWorkflowRunForEvent(octokit, context)
-  return getWorkflowRunSummary(workflowRun)
+  const summary = getWorkflowRunSummary(workflowRun)
+  return {
+    annotationMessages: [...summary.annotationMessages].join('\n'),
+    annotationFailureMessages: [...summary.annotationFailureMessages].join('\n'),
+    cancelled: summary.cancelled,
+    skipped: summary.skipped,
+    associatedPullRequest: summary.associatedPullRequest,
+  }
 }
 
 const getWorkflowRunForEvent = async (octokit: Octokit, context: Context) => {
