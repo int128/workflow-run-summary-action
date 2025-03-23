@@ -29,6 +29,18 @@ export const run = async (octokit: Octokit, context: Context): Promise<Outputs> 
   core.startGroup('Summary')
   core.info(JSON.stringify(summary, null, 2))
   core.endGroup()
+
+  core.summary.addHeading('workflow-run-summary-action', 2)
+  core.summary.addHeading('Annotations', 3)
+  core.summary.addCodeBlock(summary.annotationMessages.join('\n'))
+  core.summary.addHeading('Annotations (failure)', 3)
+  core.summary.addCodeBlock(summary.annotationFailureMessages.join('\n'))
+  if (summary.associatedPullRequest) {
+    core.summary.addHeading('Pull Request', 3)
+    core.summary.addLink(`#${summary.associatedPullRequest.number}`, summary.associatedPullRequest.url)
+  }
+  await core.summary.write()
+
   return {
     annotationMessages: summary.annotationMessages.join('\n'),
     annotationFailureMessages: summary.annotationFailureMessages.join('\n'),
