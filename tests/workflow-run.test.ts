@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { CheckAnnotationLevel, CheckConclusionState } from '../src/generated/graphql-types.js'
-import { Outputs } from '../src/run.js'
-import { getWorkflowRunSummary } from '../src/workflow-run.js'
+import { getWorkflowRunSummary, WorkflowRunSummary } from '../src/workflow-run.js'
 
 describe('getWorkflowRunSummary', () => {
   test('full fields', () => {
@@ -40,11 +39,11 @@ describe('getWorkflowRunSummary', () => {
         },
       },
     })
-    expect(outputs).toStrictEqual<Outputs>({
+    expect(outputs).toStrictEqual<WorkflowRunSummary>({
       cancelled: false,
       skipped: false,
-      annotationMessages: 'this is an example',
-      annotationFailureMessages: 'this is an example',
+      annotationMessages: new Set(['this is an example']),
+      annotationFailureMessages: new Set(['this is an example']),
       associatedPullRequest: {
         number: 484,
         url: 'https://github.com/int128/workflow-run-summary-action/pull/484',
@@ -78,11 +77,11 @@ describe('getWorkflowRunSummary', () => {
         },
       },
     })
-    expect(outputs).toStrictEqual<Outputs>({
+    expect(outputs).toStrictEqual<WorkflowRunSummary>({
       cancelled: false,
       skipped: false,
-      annotationMessages: '',
-      annotationFailureMessages: '',
+      annotationMessages: new Set(),
+      annotationFailureMessages: new Set(),
       associatedPullRequest: undefined,
     })
   })
