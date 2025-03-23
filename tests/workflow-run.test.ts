@@ -42,8 +42,8 @@ describe('getWorkflowRunSummary', () => {
     expect(outputs).toStrictEqual<WorkflowRunSummary>({
       cancelled: false,
       skipped: false,
-      annotationMessages: new Set(['this is an example']),
-      annotationFailureMessages: new Set(['this is an example']),
+      annotationMessages: ['this is an example'],
+      annotationFailureMessages: ['this is an example'],
       associatedPullRequest: {
         number: 484,
         url: 'https://github.com/int128/workflow-run-summary-action/pull/484',
@@ -80,8 +80,8 @@ describe('getWorkflowRunSummary', () => {
     expect(outputs).toStrictEqual<WorkflowRunSummary>({
       cancelled: false,
       skipped: false,
-      annotationMessages: new Set(),
-      annotationFailureMessages: new Set(),
+      annotationMessages: [],
+      annotationFailureMessages: [],
       associatedPullRequest: undefined,
     })
   })

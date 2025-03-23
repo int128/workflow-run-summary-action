@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { getWorkflowRunSummary } from './workflow-run.js'
-import { getWorkflowRun } from './queries/workflow-run.js'
+import { getWorkflowRun } from './queries/getWorkflowRun.js'
 import { Context } from './github.js'
 import { Octokit } from '@octokit/action'
 
@@ -18,23 +18,43 @@ type AssociatedPullRequest = {
 }
 
 export const run = async (octokit: Octokit, context: Context): Promise<Outputs> => {
-  const workflowRun = await getWorkflowRunForEvent(octokit, context)
+  const workflowRunNodeId = await getWorkflowRunNodeId(octokit, context)
+
+  core.startGroup(`GraphQL: getWorkflowRun(${workflowRunNodeId})`)
+  const workflowRun = await getWorkflowRun(octokit, { id: workflowRunNodeId })
+  core.info(JSON.stringify(workflowRun, null, 2))
+  core.endGroup()
+
   const summary = getWorkflowRunSummary(workflowRun)
+  core.startGroup('Summary')
+  core.info(JSON.stringify(summary, null, 2))
+  core.endGroup()
+
+  core.summary.addHeading('workflow-run-summary-action', 2)
+  core.summary.addHeading('Annotations', 3)
+  core.summary.addCodeBlock(summary.annotationMessages.join('\n'))
+  core.summary.addHeading('Annotations (failure)', 3)
+  core.summary.addCodeBlock(summary.annotationFailureMessages.join('\n'))
+  if (summary.associatedPullRequest) {
+    core.summary.addHeading('Pull Request', 3)
+    core.summary.addLink(`#${summary.associatedPullRequest.number}`, summary.associatedPullRequest.url)
+  }
+  await core.summary.write()
+
   return {
-    annotationMessages: [...summary.annotationMessages].join('\n'),
-    annotationFailureMessages: [...summary.annotationFailureMessages].join('\n'),
+    annotationMessages: summary.annotationMessages.join('\n'),
+    annotationFailureMessages: summary.annotationFailureMessages.join('\n'),
     cancelled: summary.cancelled,
     skipped: summary.skipped,
     associatedPullRequest: summary.associatedPullRequest,
   }
 }
 
-const getWorkflowRunForEvent = async (octokit: Octokit, context: Context) => {
+const getWorkflowRunNodeId = async (octokit: Octokit, context: Context) => {
   if ('workflow_run' in context.payload && context.payload.workflow_run != null) {
-    const workflowRun = context.payload.workflow_run
-    const workflowRunNodeId = workflowRun.node_id
-    core.info(`Getting the target workflow run ${workflowRunNodeId}`)
-    return await getWorkflowRun(octokit, { id: workflowRunNodeId })
+    const workflowRunNodeId = context.payload.workflow_run.node_id
+    core.info(`The target workflow run is ${workflowRunNodeId}`)
+    return workflowRunNodeId
   }
 
   core.info(`Getting the current workflow run ${context.runId}`)
@@ -44,6 +64,6 @@ const getWorkflowRunForEvent = async (octokit: Octokit, context: Context) => {
     run_id: context.runId,
   })
   const workflowRunNodeId = workflowRun.node_id
-  core.info(`Getting the workflow run ${workflowRunNodeId}`)
-  return await getWorkflowRun(octokit, { id: workflowRunNodeId })
+  core.info(`The current workflow run is ${workflowRunNodeId}`)
+  return workflowRunNodeId
 }
