@@ -1,10 +1,12 @@
 # workflow-run-summary-action [![ts](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml/badge.svg)](https://github.com/int128/workflow-run-summary-action/actions/workflows/ts.yaml)
 
-This is an action to get the summary of current workflow run.
+This action provides the summary of workflow run.
 
 ## Getting Started
 
-Here is an example to send a Slack notification on failure.
+### Example: Slack notification
+
+Here is a workflow to send the summary of workflow run to Slack using [slackapi/slack-github-action](https://github.com/slackapi/slack-github-action).
 
 ````yaml
 name: slack-notification
@@ -13,87 +15,44 @@ on:
   workflow_run:
     types:
       - completed
+    branches:
+      - main
 
 jobs:
-  main-branch:
-    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.head_branch == 'main'
+  failure:
+    if: github.event.workflow_run.conclusion == 'failure'
     runs-on: ubuntu-latest
     steps:
       - uses: int128/workflow-run-summary-action@v1
         id: summary
-
-      - uses: actions/github-script@v6
-        id: payload
+      - uses: actions/github-script@v7
+        id: body-json
+        with:
+          script: return process.env.body
         env:
-          body: |-
-            @${{ github.actor }} check ${{ github.event.workflow_run.conclusion }} at <${{ github.event.workflow_run.html_url }}|${{ github.event.workflow_run.name }}>
+          body: |
+            @${{ github.actor }} Workflow <${{ github.event.workflow_run.html_url }}|${{ github.event.workflow_run.name }}> is ${{ github.event.workflow_run.conclusion }}.
             ```
             ${{ steps.summary.outputs.annotation-messages }}
             ```
-        with:
-          # preview on https://app.slack.com/block-kit-builder
-          script: |
-            return {
-              blocks: [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": process.env.body,
-                  }
-                }
-              ]
-            }
-
       - if: steps.summary.outputs.cancelled == 'false' && steps.summary.outputs.skipped == 'false'
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
-          channel-id: YOUR-CHANNEL-ID
-          payload: ${{ steps.payload.outputs.result }}
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: your-channel-id
+            blocks:
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: ${{ steps.body-json.outputs.result }}
 ````
 
-For example,
-
-<img width="900" alt="image" src="https://user-images.githubusercontent.com/321266/155245109-22712f13-2f04-428d-9156-3fae5880ecd6.png">
-
-You can preview a payload from https://app.slack.com/block-kit-builder.
-
-### Example use-case
-
-- https://github.com/quipper/slack-notification-action
-
-## Summary
+## Specification
 
 When this action is run on a `workflow_run` event, it inspects the target workflow run.
 Otherwise, it inspects the current workflow run.
-
-### Annotation messages
-
-This actions returns the annotation messages of the current workflow run as follows:
-
-- `annotation-messages`
-- `annotation-failure-messages`
-
-### Associated pull request
-
-If the workflow run has an associated pull request, this action returns the following outputs:
-
-- `pull-request-number`
-- `pull-request-url`
-
-### Conclusion
-
-GitHub Actions returns the conclusion of workflow to `failure`, even if any job has been `cancelled` or `skipped`.
-
-This action calculates the accurate conclusion from all jobs.
-It provides the following outputs:
-
-- `cancelled`: `true` if any job is cancelled
-- `skipped`: `true` if all jobs are skipped
-
-## Specification
 
 ### Inputs
 
@@ -111,3 +70,25 @@ It provides the following outputs:
 | `pull-request-url`            | URL of associated pull request, if exists       |
 | `cancelled`                   | `true` if any check run is cancelled            |
 | `skipped`                     | `true` if all checks are skipped                |
+
+#### Annotation messages
+
+If the workflow run contains annotation messages, this action collects them and returns as a single string.
+
+- `annotation-messages`
+- `annotation-failure-messages`
+
+#### Associated pull request
+
+If the commit of the workflow run is associated with a pull request, this action returns the following outputs:
+
+- `pull-request-number`
+- `pull-request-url`
+
+#### Conclusion
+
+GitHub Actions returns the `conclusion` of workflow run to failure, even if any job has been cancelled or skipped.
+You can determine the conclusion using the following outputs:
+
+- `cancelled` indicates whether any job is cancelled.
+- `skipped` indicates whether all jobs are skipped.
