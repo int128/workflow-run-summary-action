@@ -26,10 +26,12 @@ export const run = async (octokit: Octokit, context: Context): Promise<Outputs> 
   core.endGroup()
 
   const summary = getWorkflowRunSummary(workflowRun)
-  core.info(`Summary: ${JSON.stringify(summary, null, 2)}`)
+  core.startGroup('Summary')
+  core.info(JSON.stringify(summary, null, 2))
+  core.endGroup()
   return {
-    annotationMessages: [...summary.annotationMessages].join('\n'),
-    annotationFailureMessages: [...summary.annotationFailureMessages].join('\n'),
+    annotationMessages: summary.annotationMessages.join('\n'),
+    annotationFailureMessages: summary.annotationFailureMessages.join('\n'),
     cancelled: summary.cancelled,
     skipped: summary.skipped,
     associatedPullRequest: summary.associatedPullRequest,

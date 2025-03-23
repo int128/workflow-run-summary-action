@@ -3,8 +3,8 @@ import { GetWorkflowRunQuery } from './generated/graphql.js'
 import { CheckAnnotationLevel, CheckConclusionState } from './generated/graphql-types.js'
 
 export type WorkflowRunSummary = {
-  annotationMessages: Set<string>
-  annotationFailureMessages: Set<string>
+  annotationMessages: string[]
+  annotationFailureMessages: string[]
   cancelled: boolean
   skipped: boolean
   associatedPullRequest: AssociatedPullRequest | undefined
@@ -39,8 +39,8 @@ export const getWorkflowRunSummary = (workflowRun: GetWorkflowRunQuery): Workflo
   }
 
   return {
-    annotationMessages,
-    annotationFailureMessages,
+    annotationMessages: [...annotationMessages],
+    annotationFailureMessages: [...annotationFailureMessages],
     cancelled: conclusions.some((conclusion) => conclusion === CheckConclusionState.Cancelled),
     skipped: conclusions.every((conclusion) => conclusion === CheckConclusionState.Skipped),
     associatedPullRequest: getAssociatedPullRequest(workflowRun),
