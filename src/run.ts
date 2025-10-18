@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
-import { getWorkflowRunSummary } from './workflow-run.js'
+import type { Octokit } from '@octokit/action'
+import type { Context } from './github.js'
 import { getWorkflowRun } from './queries/getWorkflowRun.js'
-import { Context } from './github.js'
-import { Octokit } from '@octokit/action'
+import { getWorkflowRunSummary } from './workflow-run.js'
 
 export type Outputs = {
   annotationMessages: string
