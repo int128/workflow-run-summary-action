@@ -1,11 +1,45 @@
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from './graphql-types.js';
 
-export type GetWorkflowRunQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+/** Represents an annotation's information level. */
+export type CheckAnnotationLevel =
+  /** An annotation indicating an inescapable error. */
+  | 'FAILURE'
+  /** An annotation indicating some information. */
+  | 'NOTICE'
+  /** An annotation indicating an ignorable error. */
+  | 'WARNING';
+
+/** The possible states for a check suite or run conclusion. */
+export type CheckConclusionState =
+  /** The check suite or run requires action. */
+  | 'ACTION_REQUIRED'
+  /** The check suite or run has been cancelled. */
+  | 'CANCELLED'
+  /** The check suite or run has failed. */
+  | 'FAILURE'
+  /** The check suite or run was neutral. */
+  | 'NEUTRAL'
+  /** The check suite or run was skipped. */
+  | 'SKIPPED'
+  /** The check suite or run was marked stale by GitHub. Only GitHub can use this conclusion. */
+  | 'STALE'
+  /** The check suite or run has failed at startup. */
+  | 'STARTUP_FAILURE'
+  /** The check suite or run has succeeded. */
+  | 'SUCCESS'
+  /** The check suite or run has timed out. */
+  | 'TIMED_OUT';
+
+export type GetWorkflowRunQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type GetWorkflowRunQuery = { __typename?: 'Query', node?:
+export type GetWorkflowRunQuery = { node:
     | { __typename: 'AddedToMergeQueueEvent' }
     | { __typename: 'AddedToProjectEvent' }
     | { __typename: 'App' }
@@ -247,6 +281,6 @@ export type GetWorkflowRunQuery = { __typename?: 'Query', node?:
     | { __typename: 'UserStatus' }
     | { __typename: 'VerifiableDomain' }
     | { __typename: 'Workflow' }
-    | { __typename: 'WorkflowRun', checkSuite: { __typename?: 'CheckSuite', checkRuns?: { __typename?: 'CheckRunConnection', nodes?: Array<{ __typename?: 'CheckRun', conclusion?: Types.CheckConclusionState | null, annotations?: { __typename?: 'CheckAnnotationConnection', nodes?: Array<{ __typename?: 'CheckAnnotation', message: string, annotationLevel?: Types.CheckAnnotationLevel | null } | null> | null } | null } | null> | null } | null, commit: { __typename?: 'Commit', associatedPullRequests?: { __typename?: 'PullRequestConnection', totalCount: number, nodes?: Array<{ __typename?: 'PullRequest', number: number, url: string } | null> | null } | null } } }
+    | { __typename: 'WorkflowRun', checkSuite: { checkRuns: { nodes: Array<{ conclusion: Types.CheckConclusionState | null, annotations: { nodes: Array<{ message: string, annotationLevel: Types.CheckAnnotationLevel | null } | null> | null } | null } | null> | null } | null, commit: { associatedPullRequests: { totalCount: number, nodes: Array<{ number: number, url: string } | null> | null } | null } } }
     | { __typename: 'WorkflowRunFile' }
    | null };
